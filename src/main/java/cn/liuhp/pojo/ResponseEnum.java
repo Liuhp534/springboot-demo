@@ -17,7 +17,7 @@ import java.util.Locale;
  * @author hz16092620
  * @date 2018年9月5日 下午8:09:34
  */
-public enum ResponseEnum {
+public enum ResponseEnum implements EnumInterface {
 
     /**
      * 枚举在变量之前
@@ -44,8 +44,6 @@ public enum ResponseEnum {
         this.en = en;
     }
 
-
-
     public String getCode() {
         return code;
     }
@@ -58,14 +56,7 @@ public enum ResponseEnum {
         return en;
     }
 
-    public String getMsg() {
-        Locale locale = LocaleContextHolder.getLocale();
-        if ("zh".equalsIgnoreCase(locale.getLanguage())) {
-            return this.zh;
-        } else {
-            return this.en;
-        }
-    }
+
 
     /**
      * 根据value获取对应的枚举
@@ -85,7 +76,27 @@ public enum ResponseEnum {
     }
 
 
+    @Override
+    public String code() {
+        return this.code;
+    }
+
+    @Override
+    public String zhMsg() {
+        return this.zh;
+    }
+
+    @Override
+    public String enMsg() {
+        return this.en;
+    }
+
+
     public static void main(String[] args) {
+        EnumInterface enumInterface = ResponseEnum.Fail;
+        System.out.println(enumInterface.code());
+        System.out.println(enumInterface.zhMsg());
+        System.out.println(enumInterface.enMsg());
         System.out.println(ResponseEnum.Fail.getMsg());
     }
 
