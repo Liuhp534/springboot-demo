@@ -1,6 +1,7 @@
 package cn.liuhp.common;
 
 import cn.liuhp.annotation.EnumI18n;
+import cn.liuhp.pojo.EnumInterface;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.Resource;
@@ -18,10 +19,7 @@ import org.springframework.util.SystemPropertyUtils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /*
 *  获取指定目录下的包的工具
@@ -124,6 +122,35 @@ public class ClassScaner implements ResourceLoaderAware {
             }
         }
         return false;
+    }
+
+    public static List<EnumInterface> analysisPackage(String packageStr) {
+        List<EnumInterface> allEnums = new ArrayList<>(256);
+        Set<Class> sets = ClassScaner.scan(packageStr);
+        try {
+            for (Class clazz : sets) {
+                if (isEnumInterface(clazz)) {
+                    EnumInterface[] temps = (EnumInterface[]) clazz.getEnumConstants();
+                    allEnums.addAll(Arrays.asList(temps));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("异常了");
+        }
+        return allEnums;
+    }
+
+    private static boolean isEnumInterface(Class clazz) {
+        if (!clazz.isEnum()) {
+            return Boolean.FALSE;
+        }
+        Class[] clazzInterfaces = clazz.getInterfaces();
+        for (Class c : clazzInterfaces) {
+            if (c.getName().equalsIgnoreCase(EnumInterface.class.getName())) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
     public static void main(String[] args) {

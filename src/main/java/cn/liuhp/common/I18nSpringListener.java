@@ -22,7 +22,7 @@ public class I18nSpringListener implements ApplicationListener<ContextRefreshedE
     public void onApplicationEvent(ContextRefreshedEvent event) {
         final Map<String, EnumInterface> i18nMap = I18nContextHolder.getI18nMap();
 
-        List<EnumInterface> allEnums = PackageUtil.analysisPackage("cn.liuhp.*.*.pojo");
+        List<EnumInterface> allEnums = ClassScaner.analysisPackage("cn.liuhp.**");
         for (EnumInterface enumInterface : allEnums) {
             i18nMap.put(enumInterface.getCode(), enumInterface);
         }
