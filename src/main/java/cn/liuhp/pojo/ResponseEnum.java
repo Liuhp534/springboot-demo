@@ -1,9 +1,12 @@
 package cn.liuhp.pojo;
 
 
+import cn.liuhp.annotation.EnumI18n;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -17,12 +20,13 @@ import java.util.Locale;
  * @author hz16092620
  * @date 2018年9月5日 下午8:09:34
  */
-public enum ResponseEnum implements EnumInterface {
+@EnumI18n
+public enum ResponseEnum implements EnumInterface, EnumValuesInterface {
 
     /**
      * 枚举在变量之前
      */
-    Success("0", "成功","success"),
+    Success("0", "成功{0},{1},{2}","success"),
     Fail("999", "失败", "fail");
 
     /**
@@ -44,19 +48,26 @@ public enum ResponseEnum implements EnumInterface {
         this.en = en;
     }
 
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public String getZh() {
         return zh;
     }
 
+    @Override
     public String getEn() {
         return en;
     }
 
 
+    @Override
+    public EnumInterface[] enumToList() {
+        return ResponseEnum.values();
+    }
 
     /**
      * 根据value获取对应的枚举
@@ -76,29 +87,24 @@ public enum ResponseEnum implements EnumInterface {
     }
 
 
-    @Override
-    public String code() {
-        return this.code;
-    }
-
-    @Override
-    public String zhMsg() {
-        return this.zh;
-    }
-
-    @Override
-    public String enMsg() {
-        return this.en;
-    }
-
 
     public static void main(String[] args) {
-        EnumInterface enumInterface = ResponseEnum.Fail;
-        System.out.println(enumInterface.code());
-        System.out.println(enumInterface.zhMsg());
-        System.out.println(enumInterface.enMsg());
-        System.out.println(ResponseEnum.Fail.getMsg());
+        /*EnumInterface enumInterface = ResponseEnum.Fail;
+        System.out.println(enumInterface.getCode());
+        System.out.println(enumInterface.getZh());
+        System.out.println(enumInterface.getEn());
+        System.out.println(ResponseEnum.Fail.getI18nMsg());*/
+
+        System.out.println(ResponseEnum.Fail.getI18nMsg());
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i ++) {
+            ResponseEnum.Fail.getI18nMsg();
+            //ResponseEnum.Success.getI18nMsg("one", "two", "xxxxxxxxxxxxxxxxxxxxx");
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
     }
+
 
 
 }

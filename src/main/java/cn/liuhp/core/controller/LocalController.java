@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -31,9 +32,10 @@ public class LocalController {
     public Response local() {
         // 后台获取国际化区域
         Locale locale = LocaleContextHolder.getLocale();
-        String message = messageSource.getMessage("user.name", null, locale);
+        String[] args = {"one", "two", "three"};
+        String message = messageSource.getMessage("user.name", args, locale);
         Response response = new Response();
-        response.fail(ResponseEnum.Fail);
+        response.success(ResponseEnum.Success, args);
         return response;
     }
 
