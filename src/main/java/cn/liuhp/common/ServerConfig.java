@@ -1,6 +1,7 @@
 package cn.liuhp.common;
 
 import cn.liuhp.backup.CustomLocaleResolver;
+import cn.liuhp.limiter.RateLimiterInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -45,10 +46,15 @@ public class ServerConfig extends WebMvcConfigurerAdapter {
         return localeChangeInterceptor;
     }*/
 
+    @Bean
+    public RateLimiterInterceptor rateLimiterInterceptor() {
+        return new RateLimiterInterceptor();
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //registry.addInterceptor(this.localeChangeInterceptor()).addPathPatterns("/**");
-        registry.addInterceptor(this.customLocaleChangeInterceptor()).addPathPatterns("/**");
+        //registry.addInterceptor(this.customLocaleChangeInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(this.rateLimiterInterceptor()).addPathPatterns("/**");
     }
 }
